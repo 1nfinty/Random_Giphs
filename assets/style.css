@@ -1,0 +1,18 @@
+* {
+    box-sizing: border-box;
+  }
+
+  body{
+    background-color: red;
+    text-align:center;
+    font-size:18px;
+  }
+  button{
+    
+    background: blue;
+    text-decoration-color: azure;
+    border-radius: 12px;
+    color: white;
+    font-size: 30px;
+    padding: 0,0, auto;
+  }

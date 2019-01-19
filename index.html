@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Random Giphs</title>
+  <link rel="stylesheet" type="text/css" href="assets/style.css">
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Giphy Search</h1>
+
+    <!-- Rendered buttons will get dumped here  -->
+    <div id="buttons-view"></div>
+
+    <form id="giph-form">
+      <label for="giph-input">Random Giphs</label>
+      <h2>Type in a random thought and see what kind of giph comes up, or just click the button and a random one will be picked for you. </h2>
+      <input type="text" id="giph-input"><br>
+
+      <!-- Button triggers new giph to be added -->
+      <input id="add-giph" type="submit" value="Look up more Giphs">
+    </form>
+
+    <!-- Giphs  will get dumped Here -->
+    <div id="giph-images"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    
+    var giphs = ["Space", "Cars", "Sports", "Dog"];
+
+    function displayGiph(){
+        var giph = $(this).attr("data-name");// assigns button with attribute of 'data-name'
+        var queryURL = "https://api.giphy.com/v1/gifs/random?&tag=" + giph +"&api_key=ZHglrG30KAzMo8U7gZKmN6Ra51t9Dv73&limit=5";
+
+        $.ajax(queryURL)
+        .then(function(response) {
+            console.log(response);
+            var imgUrl = response.data.image_original_url;// variable for img url
+            var giphDiv = $("<div>");// crates div where images will 'live'
+            var giphImg = $("<img>");// creates image element with sourced image url
+            giphImg.attr("src", imgUrl);// set attribut of img url
+            giphImg.attr("alt", "data-state"); // set attribute of data-state
+            giphImg.addClass("gif");
+            giphDiv.append(giphImg);// appends image element to div element
+            $("#giph-images").prepend(giphDiv); // prepends div element to id where div images will display
+        })
+    }
+    function renderButtons(){
+        $("#buttons-view").empty(); // empties array an stops buttons from repeating
+        for(var i = 0; i < giphs.length; i ++) { // loop through array and each new button added
+            var giphButton = $("<button>"); // new buttons assign to variable
+            giphButton.addClass("giph"); // adds a class to button
+            giphButton.attr("data-name", giphs[i]); // sets attribute and gets it from array index
+            giphButton.text(giphs[i]); // adds text from value to specific button in array
+            $("#buttons-view").append(giphButton);// appends button to div
+        }
+    };
+    $("#add-giph").on("click", function(event) {
+        event.preventDefault(); // stop page from refrehsing and also allows user to hit "enter"
+        var giph = $("#giph-input").val();// variable assigned to input value
+        giphs.push(giph);// pushes giph into array of giphs
+        renderButtons();
+    });
+    $(document).on("click", ".giph", displayGiph);// click handler gets class
+    renderButtons();// render giphs array as buttons on page load
+
+    </script>
+</body>
+</html>
